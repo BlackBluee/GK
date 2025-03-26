@@ -8,6 +8,11 @@
       transform-box: fill-box;
       transform-origin: center;
     }
+    .triangle {
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: scale(0.5, 1);
+    }
     @keyframes rotate {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -16,8 +21,8 @@
 
   <!-- Pierwsza grupa elementów -->
   <g transform="translate(45.64 -13.58)">
-    <!--trójkąt fioletowy-->
-    <path fill="#3b2de6" d="M50,160 H70 L60,120 Z"/>
+    <!--trójkąt fioletowy - equilateral-->
+    <path class="triangle" fill="#3b2de6" d="M36.9,160 H83.1 L60,120 Z"/>
     <!--prostokąt czerwony-->
     <path fill="#ff0000" d="m34.39 110.65 52.45 10.95-0.96 3.65-51.68-11.53z"/>
     <!-- ośmiokąt -->
@@ -32,8 +37,8 @@
 
   <!-- Druga grupa elementów -->
   <g transform="translate(-21.08 -83.94)">
-    <!--trójkąt niebieski-->
-    <path fill="#bc0084" d="M50,160 H70 L60,120 Z"/>
+    <!--trójkąt niebieski - equilateral-->
+    <path class="triangle" fill="#bc0084" d="M36.9,160 H83.1 L60,120 Z"/>
     <!--prostokąt czerwony-->
     <path fill="#ff0000" d="m34.39 110.65 52.45 10.95-0.96 3.65-51.68-11.53z"/>
     <!-- ośmiokąt -->
@@ -48,8 +53,8 @@
 
   <!-- Trzecie grupa elementów -->
   <g transform="translate(106.72 -83.31)">
-    <!--trójkąt zielony-->
-    <path fill="#3ba500" d="M50,160 H70 L60,120 Z"/>
+    <!--trójkąt zielony - equilateral-->
+    <path class="triangle" fill="#3ba500" d="M36.9,160 H83.1 L60,120 Z"/>
     <!--prostokąt czerwony-->
     <path fill="#ff0000" d="m34.39 110.65 52.45 10.95-0.96 3.65-51.68-11.53z"/>
     <!-- ośmiokąt -->
