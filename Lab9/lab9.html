@@ -21,20 +21,12 @@ var roof;
 var roof2;
 var horses = []; // Array to track horse positions
 
-/**
- *  The render function draws the scene.
- */
 function render() {
     renderer.render(scene, camera);
 }
 
-/**
- * This function is called by the init() method to create the world. 
- */
-
-
 function createWorld() {
-    renderer.setClearColor("white"); // Background color for scene
+    renderer.setClearColor("white"); 
     scene = new THREE.Scene();
     
     camera = new THREE.PerspectiveCamera(30, canvas.width/canvas.height, 0.1, 100);
@@ -50,7 +42,7 @@ function createWorld() {
     // Floor
     var brickTexture = new THREE.TextureLoader().load('resources/brick.jpg');
     brickTexture.wrapS = brickTexture.wrapT = THREE.RepeatWrapping;
-    brickTexture.repeat.set(4, 4); // Adjust texture repeat as needed
+    brickTexture.repeat.set(4, 4); 
     
     floor = new THREE.Mesh(
         new THREE.CylinderGeometry(13.5, 13.5, 0.6, 8, 1),  
@@ -129,7 +121,7 @@ function createWorld() {
     paisleyTexture2.repeat.set(4, 1);
     
     roof2 = new THREE.Mesh(
-        new THREE.CylinderGeometry(12, 12, 0.3, 8, 1), // 8 sides to match octagon
+        new THREE.CylinderGeometry(12, 12, 0.3, 8, 1), 
         new THREE.MeshPhongMaterial({
             map: paisleyTexture2,
             specular: 0x222222,
@@ -144,7 +136,7 @@ function createWorld() {
     var loader = new THREE.GLTFLoader();
     for (var i = 0; i < 8; i++) {
         (function(index) {
-            loader.load('https://threejs.org/examples/models/gltf/Horse.glb', function(gltf) {
+            loader.load('./resources/Horse.glb', function(gltf) {
                 gltf.scene.scale.multiplyScalar(0.03);
                 
                 var angle = (index / 8) * Math.PI * 2;
@@ -192,15 +184,11 @@ function createWorld() {
 }
 
 
-/**
- *  Update animation for each frame
- */
 function updateForFrame() {
     floor.rotation.y += 0.01;
     roof.rotation.y += 0.01;
     roof2.rotation.y += 0.01;
     
-    // Rotate all pivot points (which rotate poles and horses)
     for (var i = 0; i < pivots.length; i++) {
         pivots[i].rotation.y += 0.01;
     }
@@ -239,7 +227,6 @@ function installOrbitControls() {
     canvas.addEventListener("touchmove", touch, false);
 }
 
-/*  Called when user changes setting of the Animate checkbox */
 function doAnimateCheckbox() {
     var run = document.getElementById("animateCheckbox").checked;
     if (run != animating) {
@@ -250,7 +237,6 @@ function doAnimateCheckbox() {
     }
 }
 
-/*  Drives the animation, called by system through requestAnimationFrame() */
 function doFrame() {
     if (animating) {
         frameNumber++;
@@ -262,9 +248,6 @@ function doFrame() {
 
 /*----------------------------- INITIALIZATION ----------------------------------------*/
 
-/**
- *  Initialize the scene
- */
 function init() {
     try {
         canvas = document.getElementById("glcanvas");
