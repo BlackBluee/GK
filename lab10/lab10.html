@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<title>CS 424 Lab 9 - Decagonal Merry-Go-Round</title>
+<script src="https://cdn.jsdelivr.net/npm/three@0.115/build/three.js"></script>
+<script src="./resources/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.115/examples/js/loaders/GLTFLoader.js"></script>
+<script>
+
+"use strict";
+
+var canvas, renderer, scene, camera; // Standard three.js requirements.
+var controls;  // OrbitControls for mouse rotation
+var animating = false;  // Set to true when animation is in progress
+var frameNumber = 0;  // Frame counter for animation
+
+var bishopModel; // The bishop model
+
+function render() {
+    renderer.render(scene, camera);
+}
+
+function createWorld() {
+    renderer.setClearColor("white"); 
+    scene = new THREE.Scene();
+    
+    camera = new THREE.PerspectiveCamera(50, canvas.width/canvas.height, 0.01, 100);
+    camera.position.z = 10;
+    camera.position.y = 5;
+    camera.position.x = 5;
+    
+    var light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(1, 1, 1);
+    scene.add(light);
+    
+    var ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+    bishopModel = createBishop();
+}
+
+function createBishop() {
+    var material = new THREE.MeshPhongMaterial({
+        color: 0x222222,
+        specular: 0x888888,
+        shininess: 30
+    });
+
+    var bishop = new THREE.Group();
+
+    var base = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.2, 1.5, 0.5, 32),
+        material
+    );
+    bishop.add(base);
+
+    var ring = new THREE.Mesh(
+        new THREE.TorusGeometry(1.25, 0.08, 16, 32),
+        material
+    );
+    ring.rotation.x = Math.PI/2;
+    ring.position.y = 0.28;
+    bishop.add(ring);
+
+    var lower = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.8, 1.1, 1.0, 32),
+        material
+    );
+    lower.position.y = 0.8;
+    bishop.add(lower);
+
+    var middle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.5, 0.7, 1.2, 32),
+        material
+    );
+    middle.position.y = 1.9;
+    bishop.add(middle);
+
+    var ball = new THREE.Mesh(
+        new THREE.SphereGeometry(0.7, 32, 32),
+        material
+    );
+    ball.position.y = 2.9;
+    bishop.add(ball);
+
+    var hatGroup = new THREE.Group();
+    var hat = new THREE.Mesh(
+        new THREE.SphereGeometry(0.45, 32, 32, 0, Math.PI * 2, 0, Math.PI * 0.7),
+        material
+    );
+    hatGroup.add(hat);
+    hatGroup.rotation.x = -Math.PI * 0.1; 
+    hatGroup.position.y = 3.4;
+    bishop.add(hatGroup);
+
+    var slotGeometry = new THREE.BoxGeometry(0.15, 0.7, 0.4);
+    var slotMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    var slot = new THREE.Mesh(slotGeometry, slotMaterial);
+    slot.position.y = 3.4;
+    slot.position.z = 0.25;
+    bishop.add(slot);
+
+    bishop.position.set(0, 0, 0);
+
+    window.bishopModel = bishop;
+    
+    scene.add(bishop);
+}
+
+/* ---------------------------- MOUSE AND ANIMATION SUPPORT ------------------ */
+
+function installOrbitControls() {
+    controls = new THREE.OrbitControls(camera,canvas);
+    controls.noPan = true; 
+    controls.noZoom = true;
+    controls.staticMoving = true;
+    
+    function move() {
+        controls.update();
+        if (!animating) {
+            render();
+        }
+    }
+    
+    function down() {
+        document.addEventListener("mousemove", move, false);
+    }
+    
+    function up() {
+        document.removeEventListener("mousemove", move, false);
+    }
+    
+    function touch(event) {
+        if (event.touches.length == 1) {
+            move();
+        }
+    }
+    
+    canvas.addEventListener("mousedown", down, false);
+    canvas.addEventListener("touchmove", touch, false);
+}
+
+
+/*----------------------------- INITIALIZATION ----------------------------------------*/
+
+function init() {
+    try {
+        canvas = document.getElementById("glcanvas");
+        renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            antialias: true,
+            alpha: false
+        });
+    }
+    catch (e) {
+        document.getElementById("message").innerHTML="<b>Sorry, an error occurred:<br>" +
+                e + "</b>";
+        return;
+    }
+    
+    createWorld();
+    installOrbitControls();
+    render();
+}
+
+</script>
+</head>
+<body onload="init()">
+
+<h2>Three.js Modeling: bishop (variant 4) </h2>
+
+<noscript>
+   <p style="color: #AA0000; font-weight: bold">Sorry, but this page requires JavaScript!</p>
+</noscript>
+
+<p style="color:#AA0000; font-weight: bold" id="message">
+</p>
+
+<p>
+   <b style="margin-left:50px">Use the mouse to rotate the model.</b>
+</p>
+
+<div id="canvas-holder" style="float:left; border: thin solid black; background-color: white">
+   <canvas width=1200 height=600 id="glcanvas"></canvas>
+</div>
+
+</body>
+</html>
